@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+
+  manager_back:
+    container_name: manager_back
+    command: ['alembic', 'upgrade', 'head']
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      manager_db:
+        condition: service_healthy
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: manager_db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+
+    ports:
+      - "8000:8000"
+
+  manager_db:
+    container_name: manager_db
+    image: postgres
+    restart: always
+    ports:
+      - "32700:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USERNAME} -d ${DB_NAME}'"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}

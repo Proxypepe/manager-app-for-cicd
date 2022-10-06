@@ -1,0 +1,2 @@
+db:
+  url: "postgresql://root:root@localhost:32700/manager"
