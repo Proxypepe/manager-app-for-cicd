@@ -1,5 +1,9 @@
+
 pipeline{
     agent any
+    environment {
+        DOCKER_IMAGE_NAME = "justhynd/manager_app_for_cicd"
+    }
 
     stages{
         stage("get Docker version"){
@@ -8,30 +12,40 @@ pipeline{
                 sh "docker version"
             }
         }
+
         stage('Checkout') {
             steps{
                 git branch: 'main',
-                    url: 'https://github.com/Proxypepe/FastApiDocker.git'
+                    url: 'https://github.com/Proxypepe/manager-app-for-cicd.git'
                 sh "pwd"
             }
         }
 
+        stage('Testing') {
+            steps {
+                sh 'ls'
+                sh "pip3 install -r requirements.txt"
+                sh "python3 -m pytest"
+            }
+        }
+
         stage('Build docker image') {
-                steps{
-                    sh 'docker build -t justhynd/fast_api_expample'
+            steps{
+                sh 'docker build -t $DOCKER_IMAGE_NAME .'
             }
         }
 
         stage('Push docker image to DockerHub') {
             steps{
                 withDockerRegistry(credentialsId: 'docker_hub_justhynd', url: 'https://index.docker.io/v1/') {
-                    sh  'docker push justhynd/fast_api_expample:latest'
+                    sh  'docker push $DOCKER_IMAGE_NAME:latest'
                 }
             }
         }
+
         stage('Delete docker image locally') {
             steps{
-                sh 'docker rmi justhynd/fast_api_expample:latest'
+                sh 'docker rmi $DOCKER_IMAGE_NAME:latest'
             }
         }
     }

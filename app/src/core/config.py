@@ -2,6 +2,9 @@ import os
 
 
 class Config:
+    """
+    Config class
+    """
     DB_USERNAME = os.getenv("DB_USERNAME", "root")
     DB_PASSWORD = os.getenv("DB_PASSWORD", "root")
     DB_HOST = os.getenv("DB_HOST", "localhost")
