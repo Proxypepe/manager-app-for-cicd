@@ -3,7 +3,7 @@
 The application is written in Python and uses PostgreSQL to store data.
 
 Jenkins is used to implement the pipeline
-![alt text](images/cicd.png "Ci CD result")
+![alt text](images/cicd.PNG "Ci CD result")
 
 ### Technology stack
 1. Python
