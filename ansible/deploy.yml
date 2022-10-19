@@ -5,12 +5,12 @@
 
   tasks:
     - name: delete old section
-      command: microk8s kubectl delete -f "{{ item }}"
+      command: microk8s kubectl delete -f "{{ apps_location }}/""{{ item }}"
       with_items:
       - code/
 
     - name: apply new code section
-      command: microk8s kubectl delete -f "{{ item }}"
+      command: microk8s kubectl delete -f "{{ apps_location }}/""{{ item }}"
       with_items:
       - code/
       - job/
