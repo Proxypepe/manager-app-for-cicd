@@ -1,19 +1,30 @@
 ---
-- hosts: kubernetes
+- name: Deploy ansible playbook
+  hosts: kubernetes
   vars:
     apps_location: ~/manager-app-for-cicd/k8s
 
   tasks:
-    - name: delete old section
-      command: microk8s kubectl delete -f "{{ apps_location }}/""{{ item }}"
-      with_items:
-      - code/
+    - name: Register mk deployment
+      command: microk8s kubectl get deployment -n fastapi-project
+      register: current
 
-    - name: pull new version
-      shell: git pull
+    - name: Debug
+      debug:
+        msg: current.stdout_lines
 
-    - name: apply new code section
-      command: microk8s kubectl apply -f "{{ apps_location }}/""{{ item }}"
-      with_items:
-      - code/
-      - job/
+#    - name: Delete old section
+#      command: microk8s kubectl delete -f "{{ apps_location }}/""{{ item }}"
+#      with_items:
+#      - code/
+#
+#    - name: Pull new version
+#      command: git pull
+#      args:
+#        chdir: ~/manager-app-for-cicd
+#
+#    - name: Apply new code section
+#      command: microk8s kubectl apply -f "{{ apps_location }}/""{{ item }}"
+#      with_items:
+#      - code/
+#      - job/
