@@ -9,8 +9,11 @@
       with_items:
       - code/
 
+    - name: pull new version
+      shell: git pull
+
     - name: apply new code section
-      command: microk8s kubectl delete -f "{{ apps_location }}/""{{ item }}"
+      command: microk8s kubectl apply -f "{{ apps_location }}/""{{ item }}"
       with_items:
       - code/
       - job/
