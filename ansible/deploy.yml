@@ -9,22 +9,19 @@
       command: microk8s kubectl get deployment -n fastapi-project
       register: current
 
-    - name: Debug
-      debug:
-        msg: current.stdout_lines
+    - name: Delete old section
+      command: microk8s kubectl delete -f "{{ apps_location }}/""{{ item }}"
+      with_items:
+      - code/
+      when: current.stdout.find("manager-deployment") != -1
 
-#    - name: Delete old section
-#      command: microk8s kubectl delete -f "{{ apps_location }}/""{{ item }}"
-#      with_items:
-#      - code/
-#
-#    - name: Pull new version
-#      command: git pull
-#      args:
-#        chdir: ~/manager-app-for-cicd
-#
-#    - name: Apply new code section
-#      command: microk8s kubectl apply -f "{{ apps_location }}/""{{ item }}"
-#      with_items:
-#      - code/
-#      - job/
+    - name: Pull new version
+      command: git pull
+      args:
+        chdir: ~/manager-app-for-cicd
+
+    - name: Apply new code section
+      command: microk8s kubectl apply -f "{{ apps_location }}/""{{ item }}"
+      with_items:
+      - code/
+      - job/
