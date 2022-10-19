@@ -7,6 +7,7 @@ __pycache__/
 data
 k8s
 jenkins
+ansible
 # C extensions
 *.so
 
