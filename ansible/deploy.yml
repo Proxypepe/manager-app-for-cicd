@@ -1,5 +1,7 @@
 ---
 - hosts: kubernetes
+  vars:
+    apps_location: ~/manager-app-for-cicd/k8s
 
   tasks:
     - name: delete old section
