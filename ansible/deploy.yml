@@ -1,0 +1,14 @@
+---
+- hosts: kubernetes
+
+  tasks:
+    - name: delete old section
+      command: microk8s kubectl delete -f "{{ item }}"
+      with_items:
+      - code/
+
+    - name: apply new code section
+      command: microk8s kubectl delete -f "{{ item }}"
+      with_items:
+      - code/
+      - job/
